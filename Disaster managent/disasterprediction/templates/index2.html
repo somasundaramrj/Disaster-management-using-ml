@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Prediction</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to right, #141e30, #243b55);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #ddd;
+        }
+
+        button {
+            background: #ff9800;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #e65100;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 10px;
+            transition: 0.5s;
+        }
+
+        .flood {
+            background: red;
+            color: white;
+            box-shadow: 0 0 10px red;
+        }
+
+        .no-flood {
+            background: green;
+            color: white;
+            box-shadow: 0 0 10px green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🌊 Flood Prediction System</h2>
+        <form id="predictionForm">
+            <div class="input-group">
+                <label for="AgriculturalPractices">🌾 Agricultural Practices</label>
+                <input type="number" id="AgriculturalPractices" placeholder="e.g., 50" required>
+            </div>
+
+            <div class="input-group">
+                <label for="WetlandLoss">🛑 Wetland Loss</label>
+                <input type="number" id="WetlandLoss" placeholder="e.g., 30" required>
+            </div>
+
+            <div class="input-group">
+                <label for="DamsQuality">🏗️ Dams Quality</label>
+                <input type="number" id="DamsQuality" placeholder="e.g., 70" required>
+            </div>
+
+            <div class="input-group">
+                <label for="InadequatePlanning">📉 Inadequate Planning</label>
+                <input type="number" id="InadequatePlanning" placeholder="e.g., 40" required>
+            </div>
+
+            <div class="input-group">
+                <label for="ClimateChange">🌍 Climate Change</label>
+                <input type="number" id="ClimateChange" placeholder="e.g., 60" required>
+            </div>
+
+            <button type="submit">🔍 Predict</button>
+        </form>
+
+        <p id="result" class="result"></p>
+    </div>
+
+    <script>
+        document.getElementById("predictionForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            let data = {
+                AgriculturalPractices: parseFloat(document.getElementById("AgriculturalPractices").value),
+                WetlandLoss: parseFloat(document.getElementById("WetlandLoss").value),
+                DamsQuality: parseFloat(document.getElementById("DamsQuality").value),
+                InadequatePlanning: parseFloat(document.getElementById("InadequatePlanning").value),
+                ClimateChange: parseFloat(document.getElementById("ClimateChange").value)
+            };
+            
+            let response = await fetch("/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+            
+            let result = await response.json();
+            
+            let resultElement = document.getElementById("result");
+            resultElement.innerText = result.prediction_text || result.error;
+            resultElement.className = "result " + (result.prediction_text === "Flood" ? "flood" : "no-flood");
+        });
+    </script>
+</body>
+</html>

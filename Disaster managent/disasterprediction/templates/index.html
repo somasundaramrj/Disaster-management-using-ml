@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyclone Prediction</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to right, #141e30, #243b55);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #ddd;
+        }
+
+        button {
+            background: #ff9800;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #e65100;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 10px;
+            transition: 0.5s;
+        }
+
+        .cyclone {
+            background: red;
+            color: white;
+            box-shadow: 0 0 10px red;
+        }
+
+        .no-cyclone {
+            background: green;
+            color: white;
+            box-shadow: 0 0 10px green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🌪️ Cyclone Prediction System</h2>
+        <form action="/predict" method="post">
+            <div class="input-group">
+                <label for="sea_temp">🌊 Sea Surface Temperature (°C)</label>
+                <input type="text" name="sea_temp" id="sea_temp" placeholder="e.g., 29.5" required>
+            </div>
+
+            <div class="input-group">
+                <label for="humidity">💧 Humidity (%)</label>
+                <input type="text" name="humidity" id="humidity" placeholder="e.g., 85" required>
+            </div>
+
+            <div class="input-group">
+                <label for="vorticity">🔄 Vorticity</label>
+                <input type="text" name="vorticity" id="vorticity" placeholder="e.g., 75" required>
+            </div>
+
+            <div class="input-group">
+                <label for="pre_disturb">🌬️ Pre-existing Disturbance</label>
+                <input type="text" name="pre_disturb" id="pre_disturb" placeholder="e.g., 80" required>
+            </div>
+
+            <button type="submit">🔍 Predict</button>
+        </form>
+
+        {% if prediction_result %}
+            <div class="result {% if prediction_result == 'Cyclone' %}cyclone{% else %}no-cyclone{% endif %}">
+                {{ prediction_result }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

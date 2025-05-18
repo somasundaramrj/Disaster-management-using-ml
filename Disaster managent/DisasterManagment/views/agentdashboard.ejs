@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Monitoring System</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --weather-color: #2c7be5;
+            --earthquake-color: #e63757;
+            --cyclone-color: #6e00ff;
+            --flood-color: #00b8d9;
+            --alert-red: #dc3545;
+            --alert-yellow: #ffc107;
+            --alert-green: #28a745;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-header {
+            background: linear-gradient(90deg, #00296b, #003f88);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            font-size: 2.2rem;
+            margin-right: 10px;
+            color: #ffd500;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .logo-text p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .date-time {
+            text-align: right;
+            font-size: 0.9rem;
+        }
+        
+        select {
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .alert-banner {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px 20px;
+            text-align: center;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        
+        .alert-banner i {
+            font-size: 1.2rem;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .dashboard-container {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .status-overview {
+            grid-column: span 3;
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .status-card {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .status-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            color: white;
+        }
+        
+        .weather-icon { background-color: var(--weather-color); }
+        .earthquake-icon { background-color: var(--earthquake-color); }
+        .cyclone-icon { background-color: var(--cyclone-color); }
+        .flood-icon { background-color: var(--flood-color); }
+        
+        .status-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .status-normal { background-color: var(--alert-green); }
+        .status-warning { background-color: var(--alert-yellow); }
+        .status-danger { background-color: var(--alert-red); }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .dashboard-card.large-card {
+            grid-column: span 2;
+        }
+        
+        .card-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .weather-header { background-color: var(--weather-color); }
+        .earthquake-header { background-color: var(--earthquake-color); }
+        .cyclone-header { background-color: var(--cyclone-color); }
+        .flood-header { background-color: var(--flood-color); }
+        
+        .card-header h2 {
+            font-size: 1.1rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-body {
+            padding: 15px;
+            flex: 1;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .data-box {
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .data-box i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        
+        .data-box .value {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+        
+        .data-box .label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .weather-data { background-color: var(--weather-color); }
+        .earthquake-data { background-color: var(--earthquake-color); }
+        .cyclone-data { background-color: var(--cyclone-color); }
+        .flood-data { background-color: var(--flood-color); }
+        
+        .chart-container {
+            height: 250px;
+            width: 100%;
+            position: relative;
+        }
+        
+        /* Predict Button */
+        .predict-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        .predict-button:hover {
+            background-color: #004080;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            .status-overview {
+                grid-column: span 2;
+                flex-wrap: wrap;
+            }
+            .status-card {
+                min-width: 200px;
+            }
+            .dashboard-card.large-card {
+                grid-column: span 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            .status-overview {
+                grid-column: span 1;
+                flex-direction: column;
+            }
+            .header-controls {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 10px;
+            }
+        }
+        
+        .historical-data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .historical-data-table th,
+        .historical-data-table td {
+            padding: 8px 20px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .historical-data-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .historical-data-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+        
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        /* Historical Data Container */
+.historical-data-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Take full height of the row */
+    margin-left: 20px; /* Add spacing between cards */
+    flex: 1; /* Allow it to grow and fill remaining space */
+}
+
+.historical-data-container .card-header {
+    background-color: #4f6d7a;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.historical-data-container .card-header h2 {
+    font-size: 1.1rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.historical-data-container .card-body {
+    padding: 15px;
+    flex: 1;
+    overflow-y: auto; /* Enable scrolling if content overflows */
+}
+
+.historical-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.historical-data-table th,
+.historical-data-table td {
+    padding: 8px 20px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.historical-data-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.historical-data-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.legend-color {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    border-radius: 3px;
+}
+
+/* Adjust the Weather & Rainfall Monitor card */
+.dashboard-card.weather-card {
+    flex: 1; /* Allow it to grow and share space with historical data */
+    margin-right: 20px; /* Add spacing between cards */
+}
+
+/* Flexbox layout for the row */
+.dashboard-row {
+    display: flex;
+    gap: 20px; /* Add spacing between cards */
+    margin-bottom: 20px; /* Add spacing between rows */
+}
+.container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 20px; /* Add padding for spacing */
+            background-color: #f8f9fa; /* Light gray background */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+
+        /* Pie Chart Header Styling */
+        .pie-chart-container .card-header {
+            background-color: #4f6d7a;
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pie-chart-container .card-header h2 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .pie-chart-container .card-header i {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Nav Header -->
+        <div class="nav-header">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <div class="logo-text">
+                    <h1>Disaster Monitoring System</h1>
+                    <p>Unified Alert & Response Platform</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <div class="date-time">
+                    <div id="currentDate">Loading date...</div>
+                    <div id="currentTime">Loading time...</div>
+                </div>
+                <div class="city-selector">
+                    <select id="citySelect">
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Jaipur">Jaipur</option>
+                        <option value="Lucknow">Lucknow</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert Banner -->
+        <div class="alert-banner" id="alertBanner">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span id="alertMessage">No active alerts at this time</span>
+        </div>
+
+        <!-- Dashboard Container -->
+        <div class="dashboard-container">
+            <!-- Status Overview -->
+            <div class="status-overview">
+                <div class="status-card">
+                    <div class="status-icon weather-icon">
+                        <i class="fas fa-cloud-showers-heavy"></i>
+                    </div>
+                    <div class="status-info">
+                        <h3>Weather Status</h3>
+                        <div class="status-indicator status-normal" id="weatherStatus">Normal</div>
+                    </div>
+                </div>
+                <div class="status-card">
+                    <div class="status-icon earthquake-icon">
+                        <i class="fas fa-house-damage"></i>
+                    </div>
+                    <div class="status-info">
+                        <h3>Earthquake Status</h3>
+                        <div class="status-indicator status-normal" id="earthquakeStatus">Normal</div>
+                    </div>
+                </div>
+                <div class="status-card">
+                    <div class="status-icon cyclone-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div class="status-info">
+                        <h3>Cyclone Status</h3>
+                        <div class="status-indicator status-normal" id="cycloneStatus">Normal</div>
+                    </div>
+                </div>
+                <div class="status-card">
+                    <div class="status-icon flood-icon">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <div class="status-info">
+                        <h3>Flood Risk</h3>
+                        <div class="status-indicator status-normal" id="floodStatus">Normal</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cyclone Card -->
+            <div class="dashboard-card">
+                <div class="card-header cyclone-header">
+                    <h2><i class="fas fa-wind"></i> Cyclone Monitor</h2>
+                </div>
+                <div class="card-body">
+                    <div class="data-grid">
+                        <div class="data-box cyclone-data">
+                            <i class="fas fa-flag"></i>
+                            <div class="value" id="windSpeed">0 km/h</div>
+                            <div class="label">Wind Speed</div>
+                        </div>
+                        <div class="data-box cyclone-data">
+                            <i class="fas fa-compress-arrows-alt"></i>
+                            <div class="value" id="pressure">0 hPa</div>
+                            <div class="label">Pressure</div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="cycloneChart"></canvas>
+                    </div>
+                    <span>
+                        <button class="predict-button" onclick="window.location.href='http://127.0.0.1:5000'">🔍 Predict</button>
+                        <button class="predict-button" style="background-color: red;" onclick="sendAlert('cyclone')">Alert</button>
+                    </span>
+                </div>
+            </div>
+
+            <!-- River Level Card -->
+            <div class="dashboard-card">
+                <div class="card-header flood-header">
+                    <h2><i class="fas fa-water"></i> Flood Monitor</h2>
+                </div>
+                <div class="card-body">
+                    <div class="data-grid">
+                        <div class="data-box flood-data">
+                            <i class="fas fa-ruler-vertical"></i>
+                            <div class="value" id="riverLevel">0 m</div>
+                            <div class="label">Current Level</div>
+                        </div>
+                        <div class="data-box flood-data">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="value">5.0 m</div>
+                            <div class="label">Flood Threshold</div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="riverLevelChart"></canvas>
+                    </div>
+                    <span>
+                        <button class="predict-button" onclick="window.location.href='http://127.0.0.1:8080'">🔍 Predict</button>
+                        <button class="predict-button" style="background-color: red;" onclick="sendAlert('flood')">Alert</button>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Earthquake Card -->
+            <div class="dashboard-card">
+                <div class="card-header earthquake-header">
+                    <h2><i class="fas fa-house-damage"></i> Earthquake Monitor</h2>
+                </div>
+                <div class="card-body">
+                    <div class="data-grid">
+                        <div class="data-box earthquake-data">
+                            <i class="fas fa-ruler"></i>
+                            <div class="value" id="magnitude">0.0</div>
+                            <div class="label">Magnitude</div>
+                        </div>
+                        <div class="data-box earthquake-data">
+                            <i class="fas fa-arrow-down"></i>
+                            <div class="value" id="depth">0 km</div>
+                            <div class="label">Depth</div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="earthquakeChart"></canvas>
+                    </div>
+                    <span>
+                        <button class="predict-button" onclick="window.location.href='http://127.0.0.1:9000'">🔍 Predict</button>
+                        <button class="predict-button" style="background-color: red;" onclick="sendAlert('earthquake')">Alert</button>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Weather Card -->
+            <div class="dashboard-card">
+                <div class="card-header weather-header">
+                    <h2><i class="fas fa-cloud-rain"></i> Weather & Rainfall Monitor</h2>
+                </div>
+                <div class="card-body">
+                    <div class="data-grid">
+                        <div class="data-box weather-data">
+                            <i class="fas fa-tint"></i>
+                            <div class="value" id="rainfall">0 mm</div>
+                            <div class="label">Rainfall</div>
+                        </div>
+                        <div class="data-box weather-data">
+                            <i class="fas fa-water"></i>
+                            <div class="value" id="humidity">0%</div>
+                            <div class="label">Humidity</div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="rainfallChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historical Data Card -->
+            <div class="historical-data-container">
+                <div class="card-header">
+                    <h2><i class="fas fa-history"></i> Historical Data</h2>
+                </div>
+                <div class="card-body">
+                    <table class="historical-data-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Event Type</th>
+                                <th>Reading</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <!-- Dynamic content will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pie Chart Card -->
+            <div class="pie-chart-container">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-pie"></i> Disaster Distribution (This Month)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="disasterPieChart"></canvas>
+                    </div>
+                    <!-- Legend for Pie Chart -->
+                    <div class="pie-chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: rgba(44, 123, 229, 0.6);"></span>
+                            <span class="legend-label">Weather</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: rgba(230, 55, 87, 0.6);"></span>
+                            <span class="legend-label">Earthquake</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: rgba(110, 0, 255, 0.6);"></span>
+                            <span class="legend-label">Cyclone</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: rgba(0, 184, 217, 0.6);"></span>
+                            <span class="legend-label">Flood</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    // Initialize chart objects
+const rainfallChart = new Chart(
+    document.getElementById('rainfallChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: [
+            {
+                label: 'Rainfall (mm)',
+                data: [],
+                backgroundColor: 'rgba(44, 123, 229, 0.6)',
+                borderColor: 'rgba(44, 123, 229, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Heavy Rain Threshold',
+                data: Array(10).fill(25),
+                type: 'line',
+                borderColor: 'rgba(220, 53, 69, 0.8)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: false,
+                pointRadius: 0
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: { title: { display: true, text: 'Time' } },
+            y: { title: { display: true, text: 'Rainfall (mm)' }, min: 0, suggestedMax: 30 }
+        }
+    }
+});
+
+const riverLevelChart = new Chart(
+    document.getElementById('riverLevelChart').getContext('2d'), {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [
+            {
+                label: 'River Level (m)',
+                data: [],
+                borderColor: '#00b8d9',
+                backgroundColor: 'rgba(0, 184, 217, 0.2)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            },
+            {
+                label: 'Warning Level',
+                data: Array(10).fill(6.0),
+                borderColor: 'rgba(255, 193, 7, 0.8)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: false,
+                pointRadius: 0
+            },
+            {
+                label: 'Danger Level',
+                data: Array(10).fill(7.0),
+                borderColor: 'rgba(220, 53, 69, 0.8)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: false,
+                pointRadius: 0
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: { title: { display: true, text: 'Time' } },
+            y: { title: { display: true, text: 'River Level (m)' }, min: 1.0, max: 10.0 }
+        }
+    }
+});
+
+const earthquakeChart = new Chart(
+    document.getElementById('earthquakeChart').getContext('2d'), {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [
+            {
+                label: 'Magnitude',
+                data: [],
+                borderColor: '#e63757',
+                backgroundColor: 'rgba(230, 55, 87, 0.2)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            },
+            {
+                label: 'Moderate Threshold',
+                data: Array(10).fill(5.0),
+                borderColor: 'rgba(255, 193, 7, 0.8)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: false,
+                pointRadius: 0
+            },
+            {
+                label: 'Severe Threshold',
+                data: Array(10).fill(7.0),
+                borderColor: 'rgba(220, 53, 69, 0.8)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: false,
+                pointRadius: 0
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: { title: { display: true, text: 'Time' } },
+            y: { title: { display: true, text: 'Magnitude' }, min: 2.0, max: 9.0 }
+        }
+    }
+});
+
+const cycloneChart = new Chart(
+    document.getElementById('cycloneChart').getContext('2d'), {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [
+            {
+                label: 'Wind Speed (km/h)',
+                data: [],
+                borderColor: '#6e00ff',
+                backgroundColor: 'rgba(110, 0, 255, 0.2)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            },
+            {
+                label: 'Storm Threshold',
+                data: Array(10).fill(50),
+                borderColor: 'rgba(255, 193, 7, 0.8)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: false,
+                pointRadius: 0
+            },
+            {
+                label: 'Cyclone Threshold',
+                data: Array(10).fill(80),
+                borderColor: 'rgba(220, 53, 69, 0.8)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: false,
+                pointRadius: 0
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: { title: { display: true, text: 'Time' } },
+            y: { title: { display: true, text: 'Wind Speed (km/h)' }, min: 0, max: 100 }
+        }
+    }
+});
+const disasterPieChart = new Chart(
+            document.getElementById('disasterPieChart').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: ['Weather', 'Earthquake', 'Cyclone', 'Flood'],
+                datasets: [{
+                    label: 'Disaster Distribution',
+                    data: [0, 0, 0, 0], // Initial data
+                    backgroundColor: [
+                        'rgba(44, 123, 229, 0.6)', // Weather
+                        'rgba(230, 55, 87, 0.6)', // Earthquake
+                        'rgba(110, 0, 255, 0.6)', // Cyclone
+                        'rgba(0, 184, 217, 0.6)'  // Flood
+                    ],
+                    borderColor: [
+                        'rgba(44, 123, 229, 1)',
+                        'rgba(230, 55, 87, 1)',
+                        'rgba(110, 0, 255, 1)',
+                        'rgba(0, 184, 217, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.raw + ' events';
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Function to update the pie chart data
+        function updatePieChart(data) {
+            const city = document.getElementById('citySelect').value;
+
+            // Simulate disaster events for the month
+            const weatherEvents = Math.floor(Math.random() * 10);
+            const earthquakeEvents = Math.floor(Math.random() * 5);
+            const cycloneEvents = Math.floor(Math.random() * 3);
+            const floodEvents = Math.floor(Math.random() * 8);
+
+            // Update the pie chart data
+            disasterPieChart.data.datasets[0].data = [
+                weatherEvents,
+                earthquakeEvents,
+                cycloneEvents,
+                floodEvents
+            ];
+            disasterPieChart.update();
+        }
+
+        // Call updatePieChart when the city changes
+        document.getElementById('citySelect').addEventListener('change', function() {
+            updatePieChart();
+        });
+
+        // Initialize the pie chart with data
+        updatePieChart();
+// Function to send alert data to the server
+function sendAlert(disasterType) {
+    const city = document.getElementById('citySelect').value;
+    let data = {};
+
+    // Collect data based on the disaster type
+    switch (disasterType) {
+        case 'cyclone':
+            data = {
+                type: 'Cyclone',
+                windSpeed: document.getElementById('windSpeed').textContent,
+                pressure: document.getElementById('pressure').textContent,
+                city: city
+            };
+            
+            break;
+        case 'flood':
+            data = {
+                type: 'Flood',
+                riverLevel: document.getElementById('riverLevel').textContent,
+                city: city
+            };
+            break;
+        case 'earthquake':
+            data = {
+                type: 'Earthquake',
+                magnitude: document.getElementById('magnitude').textContent,
+                depth: document.getElementById('depth').textContent,
+                city: city
+            };
+            break;
+        // Removed the 'weather' case since there is no Weather Alert button
+        default:
+            console.error('Invalid disaster type');
+            return;
+    }
+
+    console.log('Sending alert data:', data);
+    // Send data to the server
+    fetch('/alert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log('Alert sent successfully:', result);
+        alert(`Alert for ${disasterType} in ${city} sent to the server.`);// Refresh alerts after sending
+    })
+    .catch(error => {
+        console.error('Error sending alert:', error);
+        alert(`Alert for ${disasterType} in ${city} sent to the server.`);
+    });
+}
+// Fetch alerts every 1 minute
+function fetchAlerts() {
+    fetch('/')
+    .then(response => response.text())
+    .then(html => {
+        document.body.innerHTML = html;
+    });
+}
+// Function to generate synthetic rainfall data
+function generateRainfall(baseRainfall) {
+    return Math.max(0, baseRainfall + (Math.random() * 5 - 2.5));
+}
+
+// Function to update time display
+function updateTimeDisplay() {
+    const now = new Date();
+    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+    document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit' 
+    });
+}
+
+// Set up interval for time updates
+setInterval(updateTimeDisplay, 1000);
+updateTimeDisplay();
+
+// Function to update status indicators based on readings
+function updateStatusIndicators(data) {
+    // Weather status
+    const weatherElement = document.getElementById('weatherStatus');
+    if (data.weather.rainfall > 25) {
+        weatherElement.textContent = 'Heavy Rain';
+        weatherElement.className = 'status-indicator status-danger';
+    } else if (data.weather.rainfall > 20) {
+        weatherElement.textContent = 'Moderate Rain';
+        weatherElement.className = 'status-indicator status-warning';
+    } else {
+        weatherElement.textContent = 'Normal';
+        weatherElement.className = 'status-indicator status-normal';
+    }
+
+    // Earthquake status
+    const earthquakeElement = document.getElementById('earthquakeStatus');
+    if (data.earthquake.magnitude > 7.0) {
+        earthquakeElement.textContent = 'Severe';
+        earthquakeElement.className = 'status-indicator status-danger';
+    } else if (data.earthquake.magnitude > 5.0) {
+        earthquakeElement.textContent = 'Moderate';
+        earthquakeElement.className = 'status-indicator status-warning';
+    } else {
+        earthquakeElement.textContent = 'Normal';
+        earthquakeElement.className = 'status-indicator status-normal';
+    }
+
+    // Cyclone status
+    const cycloneElement = document.getElementById('cycloneStatus');
+    if (data.cyclone.windSpeed > 100) {
+        cycloneElement.textContent = 'Cyclonic';
+        cycloneElement.className = 'status-indicator status-danger';
+    } else if (data.cyclone.windSpeed > 50) {
+        cycloneElement.textContent = 'Storm';
+        cycloneElement.className = 'status-indicator status-warning';
+    } else {
+        cycloneElement.textContent = 'Normal';
+        cycloneElement.className = 'status-indicator status-normal';
+    }
+
+    // Flood status
+    const floodElement = document.getElementById('floodStatus');
+    if (data.weather.riverLevel > 7.0) {
+        floodElement.textContent = 'High Risk';
+        floodElement.className = 'status-indicator status-danger';
+    } else if (data.weather.riverLevel > 5.0) {
+        floodElement.textContent = 'Moderate Risk';
+        floodElement.className = 'status-indicator status-warning';
+    } else {
+        floodElement.textContent = 'Normal';
+        floodElement.className = 'status-indicator status-normal';
+    }
+    // Update alert banner
+    updateAlertBanner(data);
+}
+
+// Function to update alert banner
+function updateAlertBanner(data) {
+    const alertElement = document.getElementById('alertBanner');
+    const messageElement = document.getElementById('alertMessage');
+
+    let alerts = [];
+
+    if (data.weather.rainfall > 25) {
+        alerts.push(`Heavy Rainfall Alert in ${data.city}`);
+    }
+
+    if (data.weather.riverLevel > 20) {
+        alerts.push(`Flood Warning: River Level at ${data.weather.riverLevel}m in ${data.city}`);
+    }
+
+    if (data.earthquake.magnitude > 7.0) {
+        alerts.push(`Major Earthquake Detected: ${data.earthquake.magnitude} magnitude in ${data.city}`);
+    }
+
+    if (data.cyclone.windSpeed > 120) {
+        alerts.push(`Cyclone Warning: Wind speeds at ${data.cyclone.windSpeed} km/h in ${data.city}`);
+    }
+
+    if (alerts.length > 0) {
+        alertElement.style.backgroundColor = '#f8d7da';
+        alertElement.style.color = '#721c24';
+        messageElement.textContent = alerts.join(' | ');
+    } else if (data.weather.riverLevel > 4.0 || data.weather.rainfall > 10 || data.earthquake.magnitude > 5.0 || data.cyclone.windSpeed > 80) {
+        alertElement.style.backgroundColor = '#fff3cd';
+        alertElement.style.color = '#856404';
+        messageElement.textContent = `Weather Advisory: Moderate conditions in ${data.city}. Monitor for updates.`;
+    } else {
+        alertElement.style.backgroundColor = '#d4edda';
+        alertElement.style.color = '#155724';
+        messageElement.textContent = `No active alerts at this time for ${data.city}`;
+    }
+}
+
+// Function to update the history table
+function updateHistoryTable(data, time) {
+    const tableBody = document.getElementById('historyTableBody');
+    const formattedTime = time.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit'
+    });
+
+    // Add weather entry if significant
+    if (data.weather.rainfall > 5) {
+        let status = 'Normal';
+        if (data.weather.rainfall > 30) status = 'Severe';
+        else if (data.weather.rainfall > 25) status = 'Warning';
+        addHistoryRow(tableBody, formattedTime, 'Rainfall', `${data.weather.rainfall.toFixed(1)} mm`, status);
+    }
+
+    // Add river level entry if significant
+    if (data.weather.riverLevel > 3.5) {
+        let status = 'Normal';
+        if (data.weather.riverLevel > 5.0) status = 'Severe';
+        else if (data.weather.riverLevel > 4.0) status = 'Warning';
+
+        addHistoryRow(tableBody, formattedTime, 'River Level', `${data.weather.riverLevel.toFixed(1)} m`, status);
+    }
+
+    // Add earthquake entry if significant
+    if (data.earthquake.magnitude > 4.0) {
+        let status = 'Normal';
+        if (data.earthquake.magnitude > 7.0) status = 'Severe';
+        else if (data.earthquake.magnitude > 5.0) status = 'Warning';
+
+        addHistoryRow(tableBody, formattedTime, 'Earthquake', `${data.earthquake.magnitude.toFixed(1)} magnitude`, status);
+    }
+
+    // Add cyclone entry if significant
+    if (data.cyclone.windSpeed > 60) {
+        let status = 'Normal';
+        if (data.cyclone.windSpeed > 120) status = 'Severe';
+        else if (data.cyclone.windSpeed > 100) status = 'Warning';
+
+        addHistoryRow(tableBody, formattedTime, 'Wind Speed', `${data.cyclone.windSpeed.toFixed(0)} km/h`, status);
+    }
+
+    // Limit table to latest 8 entries
+    while (tableBody.children.length > 8) {
+        tableBody.removeChild(tableBody.lastChild);
+    }
+}
+
+// Helper function to add a row to the history table
+function addHistoryRow(tableBody, time, eventType, reading, status) {
+    const row = document.createElement('tr');
+
+    const timeCell = document.createElement('td');
+    timeCell.textContent = time;
+
+    const eventCell = document.createElement('td');
+    eventCell.textContent = eventType;
+
+    const readingCell = document.createElement('td');
+    readingCell.textContent = reading;
+
+    const statusCell = document.createElement('td');
+    const statusIndicator = document.createElement('span');
+    statusIndicator.textContent = status;
+    statusIndicator.className = `status-indicator status-${status.toLowerCase() === 'severe' ? 'danger' : status.toLowerCase() === 'warning' ? 'warning' : 'normal'}`;
+    statusIndicator.style.fontSize = '0.7rem';
+    statusIndicator.style.padding = '3px 8px';
+    statusCell.appendChild(statusIndicator);
+
+    row.appendChild(timeCell);
+    row.appendChild(eventCell);
+    row.appendChild(readingCell);
+    row.appendChild(statusCell);
+
+    tableBody.insertBefore(row, tableBody.firstChild);
+}
+
+// Initial data for different cities
+const cityData = {
+    'Mumbai': {
+        weather: { 
+            baseRainfall: 10, 
+            variability: 15,
+            riverBase: 3.2
+        },
+        earthquake: { 
+            baseLevel: 3.2, 
+            variability: 1.5
+        },
+        cyclone: { 
+            baseSpeed: 20, 
+            variability: 40
+        }
+    },
+    'Delhi': {
+        weather: { 
+            baseRainfall: 5, 
+            variability: 8,
+            riverBase: 3.0
+        },
+        earthquake: { 
+            baseLevel: 3.0, 
+            variability: 1.0
+        },
+        cyclone: { 
+            baseSpeed: 20, 
+            variability: 25
+        }
+    },
+    'Kolkata': {
+        weather: { 
+            baseRainfall: 15, 
+            variability: 20,
+            riverBase: 3.5
+        },
+        earthquake: { 
+            baseLevel: 2.8, 
+            variability: 0.8
+        },
+        cyclone: { 
+            baseSpeed: 20, 
+            variability: 50
+        }
+    },
+    'Chennai': {
+        weather: { 
+            baseRainfall: 5, 
+            variability: 18,
+            riverBase: 3.3
+        },
+        earthquake: { 
+            baseLevel: 2.5, 
+            variability: 0.6
+        },
+        cyclone: { 
+            baseSpeed: 10, 
+            variability: 30
+        }
+    },
+    'Bangalore': {
+        weather: { 
+            baseRainfall: 8, 
+            variability: 10,
+            riverBase: 2.8
+        },
+        earthquake: { 
+            baseLevel: 2.6, 
+            variability: 0.7
+        },
+        cyclone: { 
+            baseSpeed: 20, 
+            variability: 20
+        }
+    },
+    'Hyderabad': {
+        weather: { 
+            baseRainfall: 7, 
+            variability: 12,
+            riverBase: 2.9
+        },
+        earthquake: { 
+            baseLevel: 2.7, 
+            variability: 0.8
+        },
+        cyclone: { 
+            baseSpeed: 20, 
+            variability: 25
+        }
+    },
+    'Ahmedabad': {
+        weather: { 
+            baseRainfall: 6, 
+            variability: 9,
+            riverBase: 2.7
+        },
+        earthquake: { 
+            baseLevel: 3.1, 
+            variability: 1.2
+        },
+        cyclone: { 
+            baseSpeed: 15, 
+            variability: 30
+        }
+    },
+    'Pune': {
+        weather: { 
+            baseRainfall: 9, 
+            variability: 12,
+            riverBase: 2.8
+        },
+        earthquake: { 
+            baseLevel: 3.0, 
+            variability: 1.0
+        },
+        cyclone: { 
+            baseSpeed: 20, 
+            variability: 20
+        }
+    },
+    'Jaipur': {
+        weather: { 
+            baseRainfall: 4, 
+            variability: 7,
+            riverBase: 2.5
+        },
+        earthquake: { 
+            baseLevel: 2.9, 
+            variability: 0.9
+        },
+        cyclone: { 
+            baseSpeed: 10, 
+            variability: 18
+        }
+    },
+    'Lucknow': {
+        weather: { 
+            baseRainfall: 6, 
+            variability: 10,
+            riverBase: 3.1
+        },
+        earthquake: { 
+            baseLevel: 2.8, 
+            variability: 0.8
+        },
+        cyclone: { 
+            baseSpeed: 20, 
+            variability: 15
+        }
+    }
+};
+
+// Function to generate time labels
+function generateTimeLabels(count) {
+    const now = new Date();
+    const labels = [];
+
+    for (let i = count - 1; i >= 0; i--) {
+        const time = new Date(now - i * 30 * 60000); // 30 minute intervals
+        labels.push(time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
+    }
+
+    return labels;
+}
+
+// Function to initialize charts with historical data
+function initializeCharts() {
+    const city = document.getElementById('citySelect').value;
+    const timeLabels = generateTimeLabels(10);
+    const cityConfig = cityData[city];
+
+    // Generate rainfall data
+    const rainfallData = [];
+    for (let i = 0; i < 10; i++) {
+        const base = cityConfig.weather.baseRainfall;
+        const variability = cityConfig.weather.variability;
+        rainfallData.push(Math.max(0, base + (Math.random() * variability - variability / 2)));
+    }
+
+    // Generate river level data
+    const riverData = [];
+    for (let i = 0; i < 10; i++) {
+        const base = cityConfig.weather.riverBase;
+        const variability = 0.8;
+        riverData.push(Math.max(1.5, base + (Math.random() * variability - variability / 2)));
+    }
+
+    // Generate earthquake data
+    const earthquakeData = [];
+    for (let i = 0; i < 10; i++) {
+        const base = cityConfig.earthquake.baseLevel;
+        const variability = cityConfig.earthquake.variability;
+        earthquakeData.push(Math.max(2.0, base + (Math.random() * variability - variability / 2)));
+    }
+
+    // Generate cyclone data
+    const cycloneData = [];
+    for (let i = 0; i < 10; i++) {
+        const base = cityConfig.cyclone.baseSpeed;
+        const variability = cityConfig.cyclone.variability;
+        cycloneData.push(Math.max(10, base + (Math.random() * variability - variability / 2)));
+    }
+
+    // Update chart data
+    rainfallChart.data.labels = timeLabels;
+    rainfallChart.data.datasets[0].data = rainfallData;
+    rainfallChart.update();
+
+    riverLevelChart.data.labels = timeLabels;
+    riverLevelChart.data.datasets[0].data = riverData;
+    riverLevelChart.update();
+
+    earthquakeChart.data.labels = timeLabels;
+    earthquakeChart.data.datasets[0].data = earthquakeData;
+    earthquakeChart.update();
+
+    cycloneChart.data.labels = timeLabels;
+    cycloneChart.data.datasets[0].data = cycloneData;
+    cycloneChart.update();
+
+    // Update current values
+    document.getElementById('rainfall').textContent = rainfallData[rainfallData.length - 1].toFixed(1) + ' mm';
+    document.getElementById('humidity').textContent = (60 + Math.random() * 30).toFixed(0) + '%';
+    document.getElementById('riverLevel').textContent = riverData[riverData.length - 1].toFixed(1) + ' m';
+    document.getElementById('magnitude').textContent = earthquakeData[earthquakeData.length - 1].toFixed(1);
+    document.getElementById('depth').textContent = (5 + Math.random() * 15).toFixed(1) + ' km';
+    document.getElementById('windSpeed').textContent = cycloneData[cycloneData.length - 1].toFixed(0) + ' km/h';
+    document.getElementById('pressure').textContent = (1000 - cycloneData[cycloneData.length - 1] / 2).toFixed(0) + ' hPa';
+
+    // Clear history table
+    document.getElementById('historyTableBody').innerHTML = '';
+
+    // Return the latest data
+    return {
+        city: city,
+        weather: {
+            rainfall: rainfallData[rainfallData.length - 1],
+            humidity: (60 + Math.random() * 30),
+            riverLevel: riverData[riverData.length - 1]
+        },
+        earthquake: {
+            magnitude: earthquakeData[earthquakeData.length - 1],
+            depth: (5 + Math.random() * 15)
+        },
+        cyclone: {
+            windSpeed: cycloneData[cycloneData.length - 1],
+            pressure: (1000 - cycloneData[cycloneData.length - 1] / 2)
+        }
+    };
+}
+
+// Function to update the system with new data
+function updateSystem() {
+    const city = document.getElementById('citySelect').value;
+    const cityConfig = cityData[city];
+    const now = new Date();
+
+    // Get the latest data from each chart
+    const latestRainfallData = [...rainfallChart.data.datasets[0].data];
+    const latestRiverData = [...riverLevelChart.data.datasets[0].data];
+    const latestEarthquakeData = [...earthquakeChart.data.datasets[0].data];
+    const latestCycloneData = [...cycloneChart.data.datasets[0].data];
+
+    // Generate new data points
+    const newRainfall = Math.max(0, cityConfig.weather.baseRainfall + (Math.random() * cityConfig.weather.variability - cityConfig.weather.variability / 2));
+    const newRiverLevel = Math.max(1.5, cityConfig.weather.riverBase + (Math.random() * 0.8 - 0.4) + (latestRainfallData[latestRainfallData.length - 1] > 15 ? 0.3 : 0));
+    const newEarthquake = Math.max(2.0, cityConfig.earthquake.baseLevel + (Math.random() * cityConfig.earthquake.variability - cityConfig.earthquake.variability / 2));
+    const newCyclone = Math.max(10, cityConfig.cyclone.baseSpeed + (Math.random() * cityConfig.cyclone.variability - cityConfig.cyclone.variability / 2));
+
+    // Shift data and add new points
+    latestRainfallData.shift();
+    latestRainfallData.push(newRainfall);
+
+    latestRiverData.shift();
+    latestRiverData.push(newRiverLevel);
+
+    latestEarthquakeData.shift();
+    latestEarthquakeData.push(newEarthquake);
+
+    latestCycloneData.shift();
+    latestCycloneData.push(newCyclone);
+
+    // Update time labels
+    const timeLabels = [...rainfallChart.data.labels];
+    timeLabels.shift();
+    timeLabels.push(now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
+
+    // Update charts
+    rainfallChart.data.labels = timeLabels;
+    rainfallChart.data.datasets[0].data = latestRainfallData;
+    rainfallChart.update();
+
+    riverLevelChart.data.labels = timeLabels;
+    riverLevelChart.data.datasets[0].data = latestRiverData;
+    riverLevelChart.update();
+
+    earthquakeChart.data.labels = timeLabels;
+    earthquakeChart.data.datasets[0].data = latestEarthquakeData;
+    earthquakeChart.update();
+
+    cycloneChart.data.labels = timeLabels;
+    cycloneChart.data.datasets[0].data = latestCycloneData;
+    cycloneChart.update();
+
+    // Update current values
+    document.getElementById('rainfall').textContent = newRainfall.toFixed(1) + ' mm';
+    document.getElementById('humidity').textContent = (60 + Math.random() * 30).toFixed(0) + '%';
+    document.getElementById('riverLevel').textContent = newRiverLevel.toFixed(1) + ' m';
+    document.getElementById('magnitude').textContent = newEarthquake.toFixed(1);
+    document.getElementById('depth').textContent = (5 + Math.random() * 15).toFixed(1) + ' km';
+    document.getElementById('windSpeed').textContent = newCyclone.toFixed(0) + ' km/h';
+    document.getElementById('pressure').textContent = (1000 - newCyclone / 2).toFixed(0) + ' hPa';
+
+    // Create data object for status updates
+    const data = {
+        city: city,
+        weather: {
+            rainfall: newRainfall,
+            humidity: (60 + Math.random() * 30),
+            riverLevel: newRiverLevel
+        },
+        earthquake: {
+            magnitude: newEarthquake,
+            depth: (5 + Math.random() * 15)
+        },
+        cyclone: {
+            windSpeed: newCyclone,
+            pressure: (1000 - newCyclone / 2)
+        }
+    };
+
+    // Update status indicators
+    updateStatusIndicators(data);
+
+    // Update history table
+    updateHistoryTable(data, now);
+
+    return data;
+}
+
+// Handle city selection change
+document.getElementById('citySelect').addEventListener('change', function() {
+    const data = initializeCharts();
+    updateStatusIndicators(data);
+});
+
+// Initialize the system
+const initialData = initializeCharts();
+updateStatusIndicators(initialData);
+
+// Set update interval (every 30 seconds)
+setInterval(updateSystem, 5000);
+
+// Create some initial history data
+const now = new Date();
+for (let i = 1; i <= 3; i++) {
+    const pastTime = new Date(now - i * 60000 * 10);
+    updateHistoryTable(initialData, pastTime);
+}
+
+// Predict Button Functions
+function predictRainfall() {
+    const city = document.getElementById('citySelect').value;
+    const cityConfig = cityData[city];
+    const baseRainfall = cityConfig.weather.baseRainfall;
+    const variability = cityConfig.weather.variability;
+
+    // Simulate a prediction for rainfall
+    const predictedRainfall = Math.max(0, baseRainfall + (Math.random() * variability - variability / 2)).toFixed(1);
+    alert(`Predicted Rainfall for ${city}: ${predictedRainfall} mm`);
+}
+
+function predictRiverLevel() {
+    const city = document.getElementById('citySelect').value;
+    const cityConfig = cityData[city];
+    const riverBase = cityConfig.weather.riverBase;
+
+    // Simulate a prediction for river level
+    const predictedRiverLevel = Math.max(1.5, riverBase + (Math.random() * 0.8 - 0.4)).toFixed(1);
+    alert(`Predicted River Level for ${city}: ${predictedRiverLevel} m`);
+}
+
+function predictEarthquake() {
+    const city = document.getElementById('citySelect').value;
+    const cityConfig = cityData[city];
+    const baseLevel = cityConfig.earthquake.baseLevel;
+    const variability = cityConfig.earthquake.variability;
+
+    // Simulate a prediction for earthquake magnitude
+    const predictedMagnitude = Math.max(2.0, baseLevel + (Math.random() * variability - variability / 2)).toFixed(1);
+    alert(`Predicted Earthquake Magnitude for ${city}: ${predictedMagnitude}`);
+}
+
+function predictCyclone() {
+    const city = document.getElementById('citySelect').value;
+    const cityConfig = cityData[city];
+    const baseSpeed = cityConfig.cyclone.baseSpeed;
+    const variability = cityConfig.cyclone.variability;
+
+    // Simulate a prediction for cyclone wind speed
+    const predictedWindSpeed = Math.max(10, baseSpeed + (Math.random() * variability - variability / 2)).toFixed(0);
+    alert(`Predicted Cyclone Wind Speed for ${city}: ${predictedWindSpeed} km/h`);
+}
+</script>
+</body>
+</html>

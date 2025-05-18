@@ -1,0 +1,1293 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Disaster Management Portal - Your trusted source for disaster management and emergency response">
+    <meta name="theme-color" content="#ff0000">
+    <title>Disaster Management Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+    background-color: black;
+    line-height: 1.6;
+}
+
+/* Government Announcement Banner */
+.gov-announcement {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 204, 0, 0.95);
+    color: black;
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 2000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.gov-logo img {
+    width: 40px;
+    height: 40px;
+}
+
+.announcement-content {
+    flex: 1;
+}
+
+.announcement-label {
+    font-weight: bold;
+    color: #ff0000;
+    display: block;
+    font-size: 0.9rem;
+}
+
+.announcement-text {
+    font-size: 1rem;
+    margin-top: 0.25rem;
+}
+
+.announcement-close {
+    background: none;
+    border: none;
+    color: #ff0000;
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.announcement-close:hover {
+    transform: scale(1.1);
+}
+
+/* Government Updates Section */
+.gov-updates {
+    margin-top: 4rem;
+}
+
+.gov-updates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.gov-update-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gov-update-card.priority {
+    border-color: #ff0000;
+    background: rgba(255, 0, 0, 0.1);
+}
+
+.update-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.priority-label {
+    background: #ff0000;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.gov-update-card h3 {
+    color: #ffcc00;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.timestamp {
+    display: block;
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 1rem;
+}
+
+/* Background Slideshow */
+.background-slideshow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    animation: slideshow 15s infinite linear;
+    transition: background-image 1s ease-in-out;
+}
+
+@keyframes slideshow {
+    0%, 33% { background-image: url('https://i.insider.com/62ab8cad1c7744001959c082?width=700'); }
+    34%, 66% { background-image: url('https://static.theprint.in/wp-content/uploads/2021/05/2021_5img15_May_2021_PTI05_15_2021_000183B-scaled.jpg'); }
+    67%, 100% { background-image: url('https://img.freepik.com/premium-photo/cracked-road-after-earthquake-nonstandard-construction_112554-904.jpg?semt=ais_hybrid'); }
+}
+
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 0;
+}
+
+/* Navigation */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    position: fixed;
+    width: 100%;
+    top: 60px;
+    background: rgba(255, 0, 0, 0.9);
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo i {
+    font-size: 2rem;
+    color: #ffcc00;
+}
+
+.logo h1 {
+    color: #ffcc00;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-links a:hover {
+    color: #ffcc00;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.register-btn {
+    background: #ffcc00;
+    color: #ff0000 !important;
+    font-weight: bold;
+}
+
+.register-btn:hover {
+    background: white !important;
+    color: #ff0000 !important;
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001;
+}
+
+.mobile-menu-btn span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    padding: 0 1rem;
+    margin-top: 60px;
+}
+
+.hero-content {
+    background: rgba(16, 227, 33, 0.8);
+    padding: 3rem;
+    border-radius: 15px;
+    color: white;
+    max-width: 800px;
+    width: 90%;
+    box-shadow: 0 0 20px rgba(16, 227, 33, 0.3);
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-buttons button {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.emergency-btn {
+    background: #ff0000;
+    color: white;
+}
+
+.emergency-btn:hover {
+    background: #cc0000;
+    transform: scale(1.05);
+}
+
+.learn-more-btn {
+    background: white;
+    color: #10e321;
+}
+
+.learn-more-btn:hover {
+    background: #f0f0f0;
+    transform: scale(1.05);
+}
+
+/* Stats Container */
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.8);
+    margin: 2rem auto;
+    width: 90%;
+    max-width: 1200px;
+    border-radius: 10px;
+    flex-wrap: wrap;
+    z-index: 2;
+    position: relative;
+}
+
+.stat-item {
+    text-align: center;
+    color: white;
+    padding: 1.5rem;
+    flex: 1;
+    min-width: 200px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item:last-child {
+    border-right: none;
+}
+
+.stat-item i {
+    font-size: 2.5rem;
+    color: #ffcc00;
+    margin-bottom: 1rem;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: #ccc;
+}
+
+/* Sections */
+.section {
+    padding: 5rem 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.8);
+    margin: 3rem auto;
+    width: 90%;
+    max-width: 1200px;
+    border-radius: 15px;
+}
+
+.section h2 {
+    font-size: 2.5rem;
+    color: #ffcc00;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.content {
+    max-width: 1000px;
+    margin: auto;
+    font-size: 1.2rem;
+    color: white;
+}
+
+/* About Grid */
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.about-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.about-card i {
+    font-size: 2.5rem;
+    color: #ffcc00;
+    margin-bottom: 1rem;
+}
+
+.about-card h3 {
+    color: #ffcc00;
+    margin-bottom: 1rem;
+}
+
+/* Services Grid */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.service-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.service-card i {
+    font-size: 2.5rem;
+    color: #ffcc00;
+    margin-bottom: 1rem;
+}
+
+.service-card h3 {
+    color: #ffcc00;
+    margin-bottom: 1rem;
+}
+
+/* Contact Section */
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.contact-info {
+    text-align: left;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.contact-item i {
+    font-size: 1.5rem;
+    color: #ffcc00;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 1rem;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+}
+
+.contact-form textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+.contact-form button {
+    padding: 1rem;
+    background: #ffcc00;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.contact-form button:hover {
+    background: white;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: rgba(255, 204, 0, 0.95);
+    padding: 2rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(255, 204, 0, 0.3);
+    color: black;
+    position: relative;
+}
+
+.modal-icon {
+    font-size: 3rem;
+    color: #ff0000;
+    margin-bottom: 1rem;
+}
+
+.close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #ff0000;
+    transition: all 0.3s ease;
+}
+
+.close:hover {
+    transform: scale(1.1);
+}
+
+.emergency-contacts {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+}
+
+.emergency-contacts p {
+    margin: 0.5rem 0;
+}
+
+.acknowledge {
+    background: #ff0000;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem auto 0;
+}
+
+.acknowledge:hover {
+    background: #cc0000;
+    transform: scale(1.05);
+}
+
+/* Footer */
+.footer {
+    background: #222;
+    color: white;
+    padding: 3rem 2rem 1rem;
+    margin-top: 3rem;
+    position: relative;
+    z-index: 2;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    margin-bottom: 2rem;
+}
+
+.footer-section h3 {
+    color: #ffcc00;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.footer-section a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin: 0.5rem 0;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #ffcc00;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-links a {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background: #ffcc00;
+    color: #222;
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem;
+        top: 85px;
+    }
+
+    .gov-announcement {
+        padding: 1rem;
+    }
+
+    .announcement-content {
+        font-size: 0.9rem;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 85px;
+        right: -100%;
+        height: calc(100vh - 85px);
+        width: 70%;
+        background: rgba(255, 0, 0, 0.95);
+        flex-direction: column;
+        padding: 5rem 2rem;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links.active {
+        right: 0;
+    }
+
+    .hero {
+        margin-top: 85px;
+    }
+
+    .hero-content {
+        padding: 2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1.2rem;
+    }
+
+    .section {
+        padding: 3rem 1rem;
+    }
+
+    .stat-item {
+        min-width: 150px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-item:last-child {
+        border-bottom: none;
+    }
+
+    .gov-updates-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo h1 {
+        font-size: 1.5rem;
+    }
+
+    .nav-links {
+        width: 100%;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .gov-announcement {
+        flex-direction: column;
+        text-align: center;
+        padding: 0.5rem;
+    }
+
+    .announcement-close {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+}
+</style>
+</head>
+<body>
+    <div class="background-slideshow"></div>
+    <div class="overlay"></div>
+
+    <!-- Government Announcement Banner -->
+    <div class="gov-announcement" id="govAnnouncement">
+        <div class="gov-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Government Logo" width="40" height="40">
+        </div>
+        <div class="announcement-content">
+            <span class="announcement-label">OFFICIAL ANNOUNCEMENT</span>
+            <p class="announcement-text">Due to severe weather conditions expected in the coastal regions, all residents are advised to stay alert and follow safety guidelines.</p>
+        </div>
+        <button class="announcement-close" onclick="closeAnnouncement()" aria-label="Close announcement">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+            <h1>Disaster Management</h1>
+        </div>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-links">
+            <a href="#home"><i class="fas fa-home"></i> Home</a>
+            <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+            <a href="#services"><i class="fas fa-hands-helping"></i> Services</a>
+            <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+            <a href="/register" class="register-btn"><i class="fas fa-user-plus"></i> Register</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero" id="home">
+        <div class="hero-content">
+            <h1>Be Prepared. Stay Safe.</h1>
+            <p>Your trusted source for disaster management and emergency response.</p>
+            <div class="cta-buttons">
+                <button class="emergency-btn">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Emergency Help
+                </button>
+                <button class="learn-more-btn">
+                    <i class="fas fa-info-circle"></i>
+                    Learn More
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- NDMP 2019 Section -->
+<div class="section ndmp-section" id="ndmp">
+    <h2>National Disaster Management Plan (2019)</h2>
+    <p>
+        The <strong>National Disaster Management Plan (NDMP) 2019</strong> is aligned with the 
+        <strong>Sendai Framework for Disaster Risk Reduction (2015-2030)</strong>.
+        It defines clear <strong>roles & responsibilities</strong> for all stakeholders in disaster management.
+    </p>
+    
+    <ul>
+        <li>📌 <strong>Government Agencies:</strong> Policy formulation & disaster response coordination</li>
+        <li>📌 <strong>Local Authorities:</strong> Risk assessment, mitigation, and community engagement</li>
+        <li>📌 <strong>NGOs & Private Sector:</strong> Emergency relief, logistics, and rehabilitation</li>
+        <li>📌 <strong>Citizens:</strong> Awareness, preparedness, and cooperation in disaster response</li>
+    </ul>
+    
+    <img src="https://iasnext.com/wp-content/uploads/2024/01/National-Disaster-Management.webp" 
+         alt="NDMP 2019 Image" class="ndmp-image">
+</div>
+
+<style>
+    .ndmp-section {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 40px;
+        border-radius: 10px;
+        max-width: 900px;
+        margin: auto;
+        text-align: center;
+        color: white;
+    }
+
+    .ndmp-section h2 {
+        font-size: 2.5rem;
+        color: #ffcc00;
+        margin-bottom: 20px;
+    }
+
+    .ndmp-section ul {
+        text-align: left;
+        max-width: 600px;
+        margin: auto;
+        padding-left: 20px;
+    }
+
+    .ndmp-section li {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .ndmp-image {
+        width: 100%;
+        max-width: 600px;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+</style>
+<br>
+<div class="section hadr-section" id="hadr">
+    <h2>Humanitarian Assistance and Disaster Relief (HADR) Guidelines</h2>
+    
+    <div class="hadr-content">
+        <p>
+            <strong>Humanitarian Assistance and Disaster Relief (HADR)</strong> operations have emerged as a critical 
+            component of India’s role in the global community. In a world increasingly affected by natural 
+            and man-made disasters, India, with its vast experience in disaster management, is committed 
+            to offering structured, coordinated, and timely responses to nations in need.
+        </p>
+        
+        <img src="https://thehinduimages.com/admin/images/pimages/p9f4bae8.jpg"
+             alt="HADR Guidelines Image" class="hadr-image">
+        
+        <p>
+            These guidelines represent a significant stride toward enhancing India’s capacity to assist 
+            countries facing disaster crises, reinforcing our dedication to humanitarian values and regional 
+            stability. They outline the guiding principles, roles, and responsibilities of key stakeholders, ensuring 
+            that relief operations are efficient, ethical, and inclusive. 
+        </p>
+
+        <p>
+            India’s strategic geographical position, combined with its disaster management capabilities, enables it 
+            to play a pivotal role in providing timely and effective disaster relief. The guidelines emphasize transparency, 
+            accountability, and respect for the sovereignty of affected nations while fostering international collaboration.
+        </p>
+
+        <p>
+            The development of these guidelines is the result of a collaborative effort involving various ministries, 
+            departments, and key stakeholders. Special recognition goes to <strong>Col Gaurav Bhatia, PhD (Retd)</strong>, 
+            Senior Consultant (HADR), for his instrumental role in preparing these guidelines.
+        </p>
+
+        <p>
+            With the adoption of this framework, India reaffirms its commitment as a global leader in disaster response, 
+            striving for a more resilient and compassionate world.
+        </p>
+    </div>
+</div>
+    <!-- Government Updates Section -->
+    <section class="section gov-updates">
+        <h2><i class="fas fa-landmark"></i> Government Updates</h2>
+        <div class="gov-updates-grid">
+            <div class="gov-update-card priority">
+                <div class="update-header">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Government Logo" width="30" height="30">
+                    <span class="priority-label">HIGH PRIORITY</span>
+                </div>
+                <h3>Emergency Weather Alert</h3>
+                <p>Cyclone warning for coastal areas. Expected landfall within 48 hours.</p>
+                <span class="timestamp">Updated: 2 hours ago</span>
+            </div>
+            <div class="gov-update-card">
+                <div class="update-header">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Government Logo" width="30" height="30">
+                </div>
+                <h3>Relief Centers Activated</h3>
+                <p>Additional relief centers have been set up in vulnerable areas.</p>
+                <span class="timestamp">Updated: 5 hours ago</span>
+            </div>
+            <div class="gov-update-card">
+                <div class="update-header">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Government Logo" width="30" height="30">
+                </div>
+                <h3>Emergency Response Teams</h3>
+                <p>Teams have been deployed to assist in evacuation procedures.</p>
+                <span class="timestamp">Updated: 6 hours ago</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Stats -->
+    <div class="stats-container">
+        <div class="stat-item">
+            <i class="fas fa-user-shield"></i>
+            <span class="stat-number">5000+</span>
+            <span class="stat-label">People Helped</span>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-globe-americas"></i>
+            <span class="stat-number">50+</span>
+            <span class="stat-label">Locations</span>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-clock"></i>
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">Support</span>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <h2><i class="fas fa-info-circle"></i> About Us</h2>
+        <div class="content">
+            <div class="about-grid">
+                <div class="about-card">
+                    <i class="fas fa-bullhorn"></i>
+                    <h3>Real-time Updates</h3>
+                    <p>Instant notifications about emergencies and disasters in your area.</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-book"></i>
+                    <h3>Safety Guidelines</h3>
+                    <p>Comprehensive guides for different types of disasters.</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-hands-helping"></i>
+                    <h3>Emergency Response</h3>
+                    <p>Quick and efficient emergency response coordination.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section" id="services">
+        <h2><i class="fas fa-hands-helping"></i> Our Services</h2>
+        <div class="content">
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-bell"></i>
+                    <h3>Early Warning System</h3>
+                    <p>Advanced alert system for immediate notification of potential disasters.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-procedures"></i>
+                    <h3>Emergency Response</h3>
+                    <p>Coordinated response strategies for various emergency situations.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h3>Training Programs</h3>
+                    <p>Regular training sessions for disaster preparedness.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h3>Resource Mapping</h3>
+                    <p>Detailed mapping of emergency resources and safe zones.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+        <div class="content">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <p>support@disasterportal.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <p>+1 234 567 890</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-location-dot"></i>
+                        <p>123 Emergency St, Safety City</p>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- HADR Guidelines Section -->
+
+<style>
+    .hadr-section {
+        background: rgba(0, 0, 0, 0.85);
+        padding: 40px;
+        border-radius: 10px;
+        max-width: 900px;
+        margin: auto;
+        text-align: center;
+        color: white;
+    }
+
+    .hadr-section h2 {
+        font-size: 2.5rem;
+        color: #ffcc00;
+        margin-bottom: 20px;
+    }
+
+    .hadr-content {
+        text-align: justify;
+        max-width: 800px;
+        margin: auto;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .hadr-image {
+        width: 100%;
+        max-width: 600px;
+        border-radius: 10px;
+        margin: 20px auto;
+        display: block;
+    }
+
+    @media (max-width: 768px) {
+        .hadr-section {
+            padding: 30px;
+        }
+        .hadr-section h2 {
+            font-size: 2rem;
+        }
+        .hadr-content {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+
+    <!-- Popup Message -->
+    <div id="welcomeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <i class="fas fa-exclamation-triangle modal-icon"></i>
+            <h2>Welcome to Disaster Management Portal</h2>
+            <p>Stay prepared and stay safe with real-time updates and disaster response guidelines.</p>
+            <div class="emergency-contacts">
+                <p><strong>Emergency Contacts:</strong></p>
+                <p><i class="fas fa-phone"></i> Emergency: 911</p>
+                <p><i class="fas fa-ambulance"></i> Ambulance: +1 234 567 890</p>
+            </div>
+            <button class="acknowledge" onclick="closeModal()">
+                <i class="fas fa-check"></i> Got it!
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Emergency Contact</h3>
+                <p><i class="fas fa-phone"></i> 24/7 Helpline: 911</p>
+                <p><i class="fas fa-envelope"></i> emergency@disasterportal.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Disaster Management Portal | All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const navLinks = document.querySelector('.nav-links');
+
+mobileMenuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+});
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.navbar') && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+});
+
+// Government Announcement
+function closeAnnouncement() {
+    const announcement = document.getElementById('govAnnouncement');
+    announcement.style.height = announcement.offsetHeight + 'px';
+    announcement.style.opacity = '0';
+    setTimeout(() => {
+        announcement.style.height = '0';
+        announcement.style.padding = '0';
+        announcement.style.margin = '0';
+        setTimeout(() => {
+            announcement.style.display = 'none';
+            // Adjust navbar and hero section position
+            document.querySelector('.navbar').style.top = '0';
+            document.querySelector('.hero').style.marginTop = '60px';
+            // Adjust mobile menu
+            if (window.innerWidth <= 768) {
+                document.querySelector('.nav-links').style.top = '60px';
+            }
+        }, 300);
+    }, 10);
+}
+
+// Smooth scroll for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            // Close mobile menu if open
+            navLinks.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+});
+
+// Navbar scroll effect
+let lastScroll = 0;
+const navbar = document.querySelector('.navbar');
+
+window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    
+    if (currentScroll > lastScroll && currentScroll > 100) {
+        navbar.style.transform = 'translateY(-100%)';
+    } else {
+        navbar.style.transform = 'translateY(0)';
+    }
+    
+    if (currentScroll > 100) {
+        navbar.style.background = 'rgba(255, 0, 0, 0.95)';
+        navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.3)';
+    } else {
+        navbar.style.background = 'rgba(255, 0, 0, 0.9)';
+        navbar.style.boxShadow = 'none';
+    }
+    
+    lastScroll = currentScroll;
+});
+
+// Welcome Modal
+function closeModal() {
+    const modal = document.getElementById('welcomeModal');
+    modal.style.opacity = '0';
+    setTimeout(() => {
+        modal.style.display = 'none';
+        modal.style.opacity = '1';
+    }, 300);
+}
+
+window.onload = function() {
+    setTimeout(() => {
+        const modal = document.getElementById('welcomeModal');
+        modal.style.display = 'flex';
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.opacity = '1';
+        }, 10);
+    }, 1000);
+};
+
+// Form submission
+const contactForm = document.querySelector('.contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Add form submission logic here
+        alert('Thank you for your message. We will get back to you soon!');
+        contactForm.reset();
+    });
+}
+
+// Emergency button action
+const emergencyBtn = document.querySelector('.emergency-btn');
+if (emergencyBtn) {
+    emergencyBtn.addEventListener('click', () => {
+        // Add emergency action logic here
+        alert('Connecting to emergency services...');
+    });
+}
+
+// Animation on scroll
+const animateOnScroll = () => {
+    const elements = document.querySelectorAll('.section, .stat-item, .about-card, .service-card, .gov-update-card');
+    
+    elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementBottom = element.getBoundingClientRect().bottom;
+        const windowHeight = window.innerHeight;
+        
+        if (elementTop < windowHeight * 0.8 && elementBottom > 0) {
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+        }
+    });
+};
+
+// Initialize animation properties
+document.querySelectorAll('.section, .stat-item, .about-card, .service-card, .gov-update-card').forEach(element => {
+    element.style.opacity = '0';
+    element.style.transform = 'translateY(20px)';
+    element.style.transition = 'all 0.6s ease-out';
+});
+
+window.addEventListener('scroll', animateOnScroll);
+window.addEventListener('load', animateOnScroll);
+    </script>
+</body>
+</html>

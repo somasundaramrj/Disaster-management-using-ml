@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f6f9fa, #90b3ee);
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .message-box {
+            background: rgba(219, 5, 27, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        h1 {
+            font-size: 2rem;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        a {
+            color: #ffdd57;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="message-box" id="messageBox">
+        <h1>Thank You, <span id="userName"><%= name || "User" %></span>!</h1>
+        <p>Your registration has been successfully completed.</p>
+        <p><a href="/">Return to Home</a></p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const messageBox = document.getElementById("messageBox");
+            messageBox.style.opacity = "1";
+            messageBox.style.transform = "translateY(0)";
+        });
+    </script>
+</body>
+</html>

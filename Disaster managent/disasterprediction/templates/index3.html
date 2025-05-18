@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earthquake Prediction</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #141e30, #243b55);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #ddd;
+        }
+
+        button {
+            background: #ff9800;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #e65100;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 10px;
+            transition: 0.5s;
+        }
+
+        .high-risk {
+            background: red;
+            color: white;
+            box-shadow: 0 0 10px red;
+        }
+
+        .low-risk {
+            background: green;
+            color: white;
+            box-shadow: 0 0 10px green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🌍 Earthquake Prediction System</h2>
+        <form id="earthquake-form">
+            <div class="input-group">
+                <label for="latitude">📍 Latitude</label>
+                <input type="text" name="latitude" id="latitude" placeholder="e.g., 37.77" required>
+            </div>
+
+            <div class="input-group">
+                <label for="longitude">📍 Longitude</label>
+                <input type="text" name="longitude" id="longitude" placeholder="e.g., -122.42" required>
+            </div>
+
+            <div class="input-group">
+                <label for="depth">🌎 Depth (km)</label>
+                <input type="text" name="depth" id="depth" placeholder="e.g., 10" required>
+            </div>
+
+            <button type="submit">🔍 Predict</button>
+        </form>
+
+        <div id="prediction-result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        document.getElementById("earthquake-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Get input values
+            let latitude = document.getElementById("latitude").value;
+            let longitude = document.getElementById("longitude").value;
+            let depth = document.getElementById("depth").value;
+
+            // Prepare data for API
+            let formData = {
+                latitude: latitude,
+                longitude: longitude,
+                depth: depth
+            };
+
+            // Send request to Flask backend
+            fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                let resultDiv = document.getElementById("prediction-result");
+                resultDiv.style.display = "block";
+                resultDiv.textContent = data.prediction_text;
+
+                if (data.prediction_text.includes("High")) {
+                    resultDiv.className = "result high-risk";
+                } else {
+                    resultDiv.className = "result low-risk";
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>

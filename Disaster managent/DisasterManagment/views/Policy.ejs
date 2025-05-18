@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Safety Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z' fill='%23f5f5f5' opacity='.25'%3E%3C/path%3E%3Cpath d='M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z' fill='%23f5f5f5' opacity='.5'%3E%3C/path%3E%3Cpath d='M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z' fill='%23f5f5f5'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin: 2rem 0 1rem;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            color: #2980b9;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .intro {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .disaster-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 1rem 2rem;
+            margin: 0 0.5rem 1rem;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            color: #555;
+        }
+        
+        .tab-btn.active {
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background-color: #d0d0d0;
+            transform: translateY(-2px);
+        }
+        
+        .tab-btn img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .checklist {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .dos-donts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .dos, .donts {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .dos {
+            background-color: rgba(46, 204, 113, 0.1);
+            border: 2px solid #2ecc71;
+        }
+        
+        .donts {
+            background-color: rgba(231, 76, 60, 0.1);
+            border: 2px solid #e74c3c;
+        }
+        
+        .dos h3 {
+            color: #27ae60;
+        }
+        
+        .donts h3 {
+            color: #c0392b;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .checklist-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .checklist-item i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            min-width: 24px;
+            text-align: center;
+        }
+        
+        .dos .checklist-item i {
+            color: #27ae60;
+        }
+        
+        .donts .checklist-item i {
+            color: #c0392b;
+        }
+        
+        .interactive-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .quiz-container {
+            margin-top: 1.5rem;
+        }
+        
+        .quiz-question {
+            margin-bottom: 2rem;
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .quiz-question h4 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .quiz-option {
+            padding: 10px 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .quiz-option:hover {
+            background-color: #d6eaf8;
+        }
+        
+        .quiz-option.selected {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .quiz-option.correct {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .result-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .success {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+            border: 1px solid #2ecc71;
+        }
+        
+        .error {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+            border: 1px solid #e74c3c;
+        }
+        
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .btn-disabled {
+            background-color: #ecf0f1;
+            color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+        
+        .emergency-contacts {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .contact-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+        }
+        
+        .contact-card h4 {
+            margin-bottom: 0.5rem;
+            color: #3498db;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .dos-donts {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .dos, .donts {
+                min-width: 100%;
+            }
+            
+            .tab-btn {
+                font-size: 0.9rem;
+                padding: 0.8rem 1.5rem;
+            }
+        }
+        
+        /* Animation for interactive elements */
+        .animated {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Disaster Safety Guide</h1>
+        <p>Learn how to stay safe during floods, cyclones, and earthquakes</p>
+        <div class="wave"></div>
+    </header>
+    
+    <div class="container">
+        <section class="intro">
+            <h2>Be Prepared, Stay Safe</h2>
+            <p>Natural disasters can strike with little warning, but knowing what to do before, during, and after can save lives. This interactive guide provides essential information on how to prepare for and respond to three common types of disasters: floods, cyclones, and earthquakes.</p>
+            <p>Select a disaster type below to learn specific safety measures:</p>
+        </section>
+        
+        <div class="disaster-tabs">
+            <button class="tab-btn active" data-tab="flood">
+                <span>Flood Safety</span>
+            </button>
+            <button class="tab-btn" data-tab="cyclone">
+                <span>Cyclone Safety</span>
+            </button>
+            <button class="tab-btn" data-tab="earthquake">
+                <span>Earthquake Safety</span>
+            </button>
+        </div>
+        
+        <div id="flood" class="tab-content active">
+            <div class="checklist">
+                <h2>Flood Safety Measures</h2>
+                <p>Floods can develop slowly or happen suddenly without warning. Being prepared can help keep you and your family safe.</p>
+                
+                <div class="dos-donts">
+                    <div class="dos">
+                        <h3>Do's</h3>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Create an emergency plan and prepare an emergency kit with essential supplies</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Monitor weather forecasts and flood warnings regularly</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Move valuable items, electrical equipment, and chemicals to higher levels</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Turn off gas, water, and electricity if instructed to evacuate</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Evacuate immediately if advised by authorities</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Avoid walking or driving through flood waters - just 6 inches of water can knock you down</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Drink only bottled or boiled water until authorities declare the water supply safe</div>
+                        </div>
+                    </div>
+                    
+                    <div class="donts">
+                        <h3>Don'ts</h3>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't ignore evacuation orders from officials</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't drive around barricades - they are there for your safety</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't drive through flooded areas - just 12 inches of water can float a car</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't touch electrical equipment if you are wet or standing in water</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't use tap water until authorities declare it safe</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't return home until authorities say it is safe to do so</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't enter a building surrounded by floodwaters</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="cyclone" class="tab-content">
+            <div class="checklist">
+                <h2>Cyclone Safety Measures</h2>
+                <p>Cyclones (also known as hurricanes or typhoons) bring strong winds, heavy rainfall, storm surges, and potential flooding. Preparation is key to survival.</p>
+                
+                <div class="dos-donts">
+                    <div class="dos">
+                        <h3>Do's</h3>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Create an emergency plan and prepare a cyclone kit well before cyclone season</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Know your evacuation route and plan where to go if you must leave</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Secure loose items around your property and trim trees before cyclone season</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Install storm shutters or board up windows with plywood when a cyclone is approaching</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Fill bathtubs and containers with water for washing and cleaning if water supply fails</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Stay indoors during a cyclone, away from windows and doors</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Listen to battery-powered radio for updates and instructions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="donts">
+                        <h3>Don'ts</h3>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't ignore evacuation orders - leave immediately if instructed</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't go outside during the "eye" of the cyclone - violent winds will return</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't use electrical equipment during the cyclone if there's lightning</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't use candles for lighting in case of gas leaks - use flashlights instead</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't go sightseeing after a cyclone - there may be dangers like downed power lines</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't drive through flooded roads - hidden dangers may exist below the water</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't delay preparations until the last minute - cyclones can intensify rapidly</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="earthquake" class="tab-content">
+            <div class="checklist">
+                <h2>Earthquake Safety Measures</h2>
+                <p>Earthquakes strike without warning. Knowing how to react quickly and appropriately can prevent injuries and save lives.</p>
+                
+                <div class="dos-donts">
+                    <div class="dos">
+                        <h3>Do's</h3>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Drop, Cover, and Hold On - get under a sturdy table or desk and hold on</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Stay indoors until the shaking stops and you're sure it's safe to exit</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>If in bed during the earthquake, stay there and cover your head with a pillow</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>If outdoors, move to an open area away from buildings, trees, and power lines</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Keep an emergency kit ready with water, food, medicine, and essential supplies</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Know how to turn off gas, water, and electricity at main switches</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✓</i>
+                            <div>Be prepared for aftershocks which can occur minutes, days, or weeks later</div>
+                        </div>
+                    </div>
+                    
+                    <div class="donts">
+                        <h3>Don'ts</h3>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't run outside during shaking - most injuries occur when people try to move</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't stand in a doorway - modern doorways are no stronger than any other part of the house</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't use elevators during or after an earthquake</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't use matches, lighters, or any open flame inside until you're sure there are no gas leaks</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't touch fallen electrical wires or broken utility lines</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't re-enter damaged buildings until declared safe by authorities</div>
+                        </div>
+                        <div class="checklist-item">
+                            <i>✗</i>
+                            <div>Don't spread rumors or unverified information about the disaster</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="interactive-section">
+            <h2>Test Your Knowledge</h2>
+            <p>Take this quick quiz to test your understanding of disaster safety measures.</p>
+            
+            <div class="quiz-container">
+                <div class="quiz-question" id="question-1">
+                    <h4>1. During a flood, how much water can float a car?</h4>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-correct="false">3 inches of water</div>
+                        <div class="quiz-option" data-correct="false">6 inches of water</div>
+                        <div class="quiz-option" data-correct="true">12 inches of water</div>
+                        <div class="quiz-option" data-correct="false">24 inches of water</div>
+                    </div>
+                    <div class="result-message"></div>
+                </div>
+                
+                <div class="quiz-question" id="question-2" style="display: none;">
+                    <h4>2. What should you do during a cyclone?</h4>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-correct="false">Go outside to secure loose items</div>
+                        <div class="quiz-option" data-correct="false">Stand near windows to monitor the storm</div>
+                        <div class="quiz-option" data-correct="true">Stay indoors, away from windows and doors</div>
+                        <div class="quiz-option" data-correct="false">Leave your home when the eye of the storm arrives</div>
+                    </div>
+                    <div class="result-message"></div>
+                </div>
+                
+                <div class="quiz-question" id="question-3" style="display: none;">
+                    <h4>3. What is the recommended action during an earthquake?</h4>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-correct="false">Run outside immediately</div>
+                        <div class="quiz-option" data-correct="false">Stand in a doorway</div>
+                        <div class="quiz-option" data-correct="true">Drop, Cover, and Hold On</div>
+                        <div class="quiz-option" data-correct="false">Call emergency services right away</div>
+                    </div>
+                    <div class="result-message"></div>
+                </div>
+                
+                <div class="quiz-question" id="final-result" style="display: none;">
+                    <h4>Quiz Results</h4>
+                    <p id="quiz-score"></p>
+                    <p id="quiz-feedback"></p>
+                </div>
+                
+                <div class="quiz-nav">
+                    <button class="btn btn-secondary" id="prev-btn" disabled>Previous</button>
+                    <button class="btn btn-primary" id="next-btn">Next</button>
+                </div>
+            </div>
+        </section>
+        
+        <section class="interactive-section">
+            <h2>Emergency Preparation Checklist</h2>
+            <p>Use this interactive checklist to ensure you're prepared for any disaster:</p>
+            
+            <div class="checklist">
+                <div id="emergency-checklist">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item1"> 
+                        <label for="item1">Emergency water supply (1 gallon per person per day for at least 3 days)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item2"> 
+                        <label for="item2">Non-perishable food (at least a 3-day supply)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item3"> 
+                        <label for="item3">Battery-powered or hand-crank radio</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item4"> 
+                        <label for="item4">Flashlight with extra batteries</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item5"> 
+                        <label for="item5">First aid kit</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item6"> 
+                        <label for="item6">Whistle to signal for help</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item7"> 
+                        <label for="item7">Dust mask, plastic sheeting, and duct tape</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item8"> 
+                        <label for="item8">Moist towelettes, garbage bags, and plastic ties for personal sanitation</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item9"> 
+                        <label for="item9">Wrench or pliers to turn off utilities</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item10"> 
+                        <label for="item10">Can opener for food</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item11"> 
+                        <label for="item11">Local maps</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item12"> 
+                        <label for="item12">Cell phone with chargers and a backup battery</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item13"> 
+                        <label for="item13">Prescription medications and glasses</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item14"> 
+                        <label for="item14">Important family documents in a waterproof container</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item15"> 
+                        <label for="item15">Cash and change</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item16"> 
+                        <label for="item16">Emergency reference materials</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item17"> 
+                        <label for="item17">Sleeping bag or warm blanket for each person</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item18"> 
+                        <label for="item18">Complete change of clothing for each person</label>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="check-progress">Check My Preparedness</button>
+                <div class="result-message" id="checklist-result"></div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <h3>Emergency Contacts</h3>
+        <p>Keep these important emergency numbers handy:</p>
+        
+        <div class="emergency-contacts">
+            <div class="contact-card">
+                <h4>Emergency Services</h4>
+                <p>Police, Fire, Ambulance</p>
+                <p><strong>911</strong></p>
+            </div>
+            
+            <div class="contact-card">
+                <h4>Disaster Management</h4>
+                <p>National Disaster Response</p>
+                <p><strong>1-800-621-FEMA (3362)</strong></p>
+            </div>
+            
+            <div class="contact-card">
+                <h4>Medical Helpline</h4>
+                <p>Medical Emergency Advice</p>
+                <p><strong>1-800-222-1222</strong></p>
+            </div>
+        </div>
+        
+        <p class="copyright">&copy; 2025 Disaster Safety Guide. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Tab functionality
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                
+                tabBtns.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                btn.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Quiz functionality
+        const questions = document.querySelectorAll('.quiz-question');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        let currentQuestion = 0;
+        let score = 0;
+        
+        function showQuestion(questionIndex) {
+            questions.forEach((question, index) => {
+                if (index === questionIndex) {
+                    question.style.display = 'block';
+                } else {
+                    question.style.display = 'none';
+                }
+            });
+            
+            // Update button states
+            prevBtn.disabled = questionIndex === 0;
+            if (questionIndex === questions.length - 2) {
+                nextBtn.textContent = 'Show Results';
+            } else if (questionIndex === questions.length - 1) {
+                nextBtn.textContent = 'Restart Quiz';
+            } else {
+                nextBtn.textContent = 'Next';
+            }
+        }
+        
+        // Set up option selection
+        questions.forEach(question => {
+            const options = question.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remove selected class from all options in this question
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    // Add selected class to clicked option
+                    option.classList.add('selected');
+                });
+            });
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestion < questions.length - 2) {
+                // Handle answer for current question
+                const currentQuestionEl = questions[currentQuestion];
+                const selectedOption = currentQuestionEl.querySelector('.quiz-option.selected');
+                const resultMessage = currentQuestionEl.querySelector('.result-message');
+                
+                if (selectedOption) {
+                    const isCorrect = selectedOption.getAttribute('data-correct') === 'true';
+                    
+                    resultMessage.style.display = 'block';
+                    if (isCorrect) {
+                        resultMessage.textContent = 'Correct! Well done.';
+                        resultMessage.className = 'result-message success';
+                        score++;
+                    } else {
+                        const correctOption = currentQuestionEl.querySelector('.quiz-option[data-correct="true"]');
+                        resultMessage.textContent = `Incorrect. The correct answer is: "${correctOption.textContent}".`;
+                        resultMessage.className = 'result-message error';
+                    }
+                    
+                    // Move to next question
+                    currentQuestion++;
+                    showQuestion(currentQuestion);
+                } else {
+                    alert('Please select an answer before proceeding.');
+                }
+            } else if (currentQuestion === questions.length - 2) {
+                // Process the last question
+                const currentQuestionEl = questions[currentQuestion];
+                const selectedOption = currentQuestionEl.querySelector('.quiz-option.selected');
+                
+                if (selectedOption) {
+                    const isCorrect = selectedOption.getAttribute('data-correct') === 'true';
+                    if (isCorrect) score++;
+                    
+                    // Show results
+                    currentQuestion++;
+                    const scorePercentage = Math.round((score / (questions.length - 1)) * 100);
+                    document.getElementById('quiz-score').textContent = `You scored ${score} out of ${questions.length - 1} (${scorePercentage}%).`;
+                    
+                    if (scorePercentage >= 80) {
+                        document.getElementById('quiz-feedback').textContent = 'Excellent! You are well-prepared for disaster situations.';
+                    } else if (scorePercentage >= 60) {
+                        document.getElementById('quiz-feedback').textContent = 'Good job! Review the sections you missed to be better prepared.';
+                    } else {
+                        document.getElementById('quiz-feedback').textContent = 'Please review the disaster safety information and try again to improve your preparedness.';
+                    }
+                    
+                    showQuestion(currentQuestion);
+                } else {
+                    alert('Please select an answer before proceeding.');
+                }
+            } else {
+                // Restart quiz
+                currentQuestion = 0;
+                score = 0;
+                questions.forEach(question => {
+                    const options = question.querySelectorAll('.quiz-option');
+                    options.forEach(option => option.classList.remove('selected'));
+                    question.querySelector('.result-message').style.display = 'none';
+                });
+                showQuestion(currentQuestion);
+            }
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        });
+        
+        // Emergency checklist functionality
+        const checkProgressBtn = document.getElementById('check-progress');
+        const checklistResult = document.getElementById('checklist-result');
+        
+        checkProgressBtn.addEventListener('click', () => {
+            const checkboxes = document.querySelectorAll('#emergency-checklist input[type="checkbox"]');
+            const checkedCount = document.querySelectorAll('#emergency-checklist input[type="checkbox"]:checked').length;
+            const totalCount = checkboxes.length;
+            const percentage = Math.round((checkedCount / totalCount) * 100);
+            
+            checklistResult.style.display = 'block';
+            
+            if (percentage >= 80) {
+                checklistResult.className = 'result-message success';
+                checklistResult.textContent = `Great job! You are ${percentage}% prepared for emergencies. Keep up the good work!`;
+            } else if (percentage >= 50) {
+                checklistResult.className = 'result-message success';
+                checklistResult.textContent = `You are ${percentage}% prepared. Continue gathering the remaining items to improve your preparedness.`;
+            } else {
+                checklistResult.className = 'result-message error';
+                checklistResult.textContent = `You are only ${percentage}% prepared. Please prioritize collecting more emergency supplies for your safety.`;
+            }
+        });
+        
+        // Initialize the quiz
+        showQuestion(currentQuestion);
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0906c8, #f0f4ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .selection-container {
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            width: 260px;
+            height: 180px;
+            border-radius: 15px;
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            width: 60px;
+            height: 60px;
+            margin-top: 20px;
+        }
+
+        .card h2 {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+
+        @media (max-width: 600px) {
+            .card-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .card {
+                width: 80%;
+                margin: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="selection-container">
+        <h1>Welcome to the Registration Portal</h1>
+        <div class="card-container">
+            <a href="/formforcitizen" class="card">
+                <img src="data:image/png;base64,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" alt="Citizen Icon">
+                <h2>Citizen Registration</h2>
+            </a>
+            <a href="/formforagency" class="card">
+                <img src="https://thumbs.dreamstime.com/z/icon-agency-company-agency-178958770.jpg?w=768" alt="Agency Icon">
+                <h2>Agency Registration</h2>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
